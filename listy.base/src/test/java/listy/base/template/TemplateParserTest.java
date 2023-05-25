@@ -1,67 +1,48 @@
 package listy.base.template;
 
 import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
 
-import java.util.Map;
+import java.util.List;
+import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrowsExactly;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.params.provider.Arguments.arguments;
 
-@DisplayName("Template parser")
+@DisplayName("Template parsing")
 class TemplateParserTest {
 
-	@Nested
-	@DisplayName("Text mode template parser")
-	class TextModeTemplateParser {
-		@Test
-		@DisplayName("parse template without parameters")
-		void parseTemplateWithoutParameter() throws TemplateParsingException {
-			var templateText = "Template string without parameters";
-			TemplateParser templateParser = TemplateParser.textModeParser();
-
-			Template template = templateParser.parse(templateText);
-
-			assertEquals(templateText, template.templateText());
-			assertEquals(Map.of(), template.parameters());
-		}
-
-		@Test
-		@DisplayName("parse null string is not allowed")
-		void parseNullString() {
-			assertThrowsExactly(
-				TemplateParsingException.class,
-				() -> TemplateParser.textModeParser().parse(null),
-				"Template text should not be null"
-			);
-		}
-
-		@Test
-		@DisplayName("parse template with parameters")
-		void parseTemplateWithParameters() throws TemplateParsingException {
-			var templateText = "The first parameter is ${first} and the second is ${second}";
-			Template template = TemplateParser.textModeParser().parse(templateText);
-
-			assertEquals(templateText, template.templateText());
-
-			var parameters = template.parameters();
-
-			assertEquals(2, parameters.size());
-			assertEquals(new TemplateParameter("first", 23, Map.of()), parameters.get("first"));
-			assertEquals(new TemplateParameter("second", 50, Map.of()), parameters.get("second"));
-		}
-
-		@Test
-		@DisplayName("parse template with parameter without closing '}'")
-		void parseTemplateWithNotClosedParameter() {
-			assertThrowsExactly(
-				TemplateParsingException.class,
-				() -> TemplateParser.textModeParser().parse("Some ${incorrect parameter"),
-				"Invalid parameter definition at index: 5"
-			);
-		}
-
+	@Test
+	@DisplayName("Should throw exception when input is null")
+	void testNullInput() {
+		assertThrows(NullPointerException.class, () -> new TemplateParser().parse(null));
 	}
 
+	@ParameterizedTest
+	@MethodSource("testParametersParsingArgs")
+	void testParametersParsing(String input, List<Parameter> expectedParameters) {
+		var template = new TemplateParser().parse(input);
+
+		assertEquals(input, template.templateText);
+		assertEquals(expectedParameters, template.parameters);
+	}
+
+	public static Stream<Arguments> testParametersParsingArgs() {
+		return Stream.of(
+			arguments("", List.of()),
+			arguments("Simple text", List.of()),
+			arguments("${param}", List.of(new Parameter("param", 0, 8))),
+			arguments("text ${param1} text ${param2} text", List.of(
+				new Parameter("param1", 5, 9),
+				new Parameter("param2", 20, 9)
+				)
+			),
+			arguments("\\${escaped}", List.of()),
+			arguments("text \\${escaped} text", List.of())
+		);
+	}
 }
