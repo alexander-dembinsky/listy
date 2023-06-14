@@ -69,6 +69,7 @@
 	<modules>
 		<module>listy.base</module>
 		<module>listy.main</module>
+		<module>listy.ui</module>
 	</modules>
 
 </project>

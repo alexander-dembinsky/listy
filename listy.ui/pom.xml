@@ -3,34 +3,20 @@
 			xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 			xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
-
-	<artifactId>listy-main</artifactId>
-	<version>${revision}</version>
-
 	<parent>
 		<groupId>listy</groupId>
 		<artifactId>listy</artifactId>
 		<version>${revision}</version>
 	</parent>
 
+	<artifactId>listy-ui</artifactId>
+
 	<dependencies>
 		<dependency>
-			<groupId>listy</groupId>
-			<artifactId>listy-base</artifactId>
-			<version>${revision}</version>
+			<groupId>org.openjfx</groupId>
+			<artifactId>javafx-controls</artifactId>
+			<version>20</version>
 		</dependency>
-		<dependency>
-			<groupId>listy</groupId>
-			<artifactId>listy-ui</artifactId>
-			<version>${revision}</version>
-		</dependency>
-
-		<dependency>
-			<groupId>org.junit.jupiter</groupId>
-			<artifactId>junit-jupiter-engine</artifactId>
-			<scope>test</scope>
-		</dependency>
-
 	</dependencies>
 
 </project>

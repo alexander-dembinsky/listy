@@ -1,16 +1,32 @@
 package listy.main;
 
-import listy.base.template.Template;
-import listy.base.template.TemplateContext;
+import listy.ui.view.ListyApplication;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Main {
 
-	public static void main(String[] args) {
-		var template = Template.parse("Hello, ${p}!");
-		var ctx = new TemplateContext();
-		ctx.setParam("p", "Listy");
+	private static List<String> readInput() throws IOException {
+		List<String> items = new ArrayList<>();
+		try (var reader = new BufferedReader(new InputStreamReader(System.in))) {
+			while (true) {
+				String line = reader.readLine();
+				if (line == null) {
+					break;
+				}
+				items.add(line);
+			}
+		}
+		return items;
+	}
 
-		System.out.println(template.render(ctx));
+	public static void main(String[] args) throws IOException {
+		List<String> items = readInput();
+		ListyApplication.launch(items);
 	}
 
 }
