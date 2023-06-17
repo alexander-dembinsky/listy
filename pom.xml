@@ -24,6 +24,9 @@
 		<!-- Dependency versions -->
 		<junit.version>5.9.2</junit.version>
 		<mockito.version>1.10.19</mockito.version>
+
+		<!-- GraalVM -->
+		<graalvm.native.maven.plugin.version>0.9.23</graalvm.native.maven.plugin.version>
 	</properties>
 
 	<dependencyManagement>
