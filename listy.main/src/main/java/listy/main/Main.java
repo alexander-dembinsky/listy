@@ -1,32 +1,39 @@
 package listy.main;
 
-import listy.ui.view.ListyApplication;
+import listy.base.io.Inputs;
+import listy.config.ConfigurationReader;
+import listy.ui.view.ListyUiRunner;
+import listy.ui.view.ViewOptions;
+import reactor.core.publisher.Flux;
+import reactor.core.scheduler.Schedulers;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.util.ArrayList;
-import java.util.List;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 public class Main {
 
-	private static List<String> readInput() throws IOException {
-		List<String> items = new ArrayList<>();
-		try (var reader = new BufferedReader(new InputStreamReader(System.in))) {
-			while (true) {
-				String line = reader.readLine();
-				if (line == null) {
-					break;
-				}
-				items.add(line);
-			}
-		}
-		return items;
+	private static final String CONFIG_FILE_LOCATION = "%s/.config/listy.conf".formatted(System.getenv("HOME"));
+
+	public static void main(String[] args) {
+		Path configPath = Paths.get(CONFIG_FILE_LOCATION);
+
+		ConfigurationReader.ofConfigFile(configPath).read()
+			.map(ConfigViewOptions::new)
+			.doOnSuccess(Main::runApp)
+			.doOnError(Main::reportError)
+			.subscribe();
 	}
 
-	public static void main(String[] args) throws IOException {
-		List<String> items = readInput();
-		ListyApplication.launch(items);
+	private static void reportError(Throwable e) {
+		System.err.println(e.getMessage());
+	}
+
+	private static void runApp(ViewOptions viewOptions) {
+		Flux<String> items = Inputs.standardInputLines()
+			.subscribeOn(Schedulers.boundedElastic());
+
+		var runner = new ListyUiRunner(viewOptions, items);
+		runner.startUi();
 	}
 
 }

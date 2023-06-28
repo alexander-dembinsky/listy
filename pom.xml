@@ -6,13 +6,10 @@
 
 	<groupId>listy</groupId>
 	<artifactId>listy</artifactId>
-	<version>${revision}</version>
+	<version>0.0.1</version>
 	<packaging>pom</packaging>
 
 	<properties>
-		<!-- Application version -->
-		<revision>0.0.1-SNAPSHOT</revision>
-
 		<!-- Java version -->
 		<maven.compiler.source>20</maven.compiler.source>
 		<maven.compiler.target>20</maven.compiler.target>
@@ -23,14 +20,42 @@
 
 		<!-- Dependency versions -->
 		<junit.version>5.9.2</junit.version>
-		<mockito.version>1.10.19</mockito.version>
+		<mockito.version>5.4.0</mockito.version>
 
 		<!-- GraalVM -->
 		<graalvm.native.maven.plugin.version>0.9.23</graalvm.native.maven.plugin.version>
+
+		<!-- Reactor -->
+		<reactor.core.version>3.5.7</reactor.core.version>
+
+		<!-- Reactive streams -->
+		<reactive.streams.version>1.0.4</reactive.streams.version>
+
+		<hamcrest.version>2.2</hamcrest.version>
 	</properties>
 
 	<dependencyManagement>
 		<dependencies>
+			<dependency>
+				<groupId>listy</groupId>
+				<artifactId>listy-base</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>listy</groupId>
+				<artifactId>listy-config</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>listy</groupId>
+				<artifactId>listy-ui</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>io.projectreactor</groupId>
+				<artifactId>reactor-core</artifactId>
+				<version>${reactor.core.version}</version>
+			</dependency>
 			<dependency>
 				<groupId>org.junit.jupiter</groupId>
 				<artifactId>junit-jupiter-engine</artifactId>
@@ -45,8 +70,25 @@
 			</dependency>
 			<dependency>
 				<groupId>org.mockito</groupId>
-				<artifactId>mockito-all</artifactId>
+				<artifactId>mockito-core</artifactId>
 				<version>${mockito.version}</version>
+				<scope>test</scope>
+			</dependency>
+			<dependency>
+				<groupId>org.mockito</groupId>
+				<artifactId>mockito-junit-jupiter</artifactId>
+				<version>${mockito.version}</version>
+				<scope>test</scope>
+			</dependency>
+			<dependency>
+				<groupId>io.projectreactor</groupId>
+				<artifactId>reactor-test</artifactId>
+				<version>${reactor.core.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.hamcrest</groupId>
+				<artifactId>hamcrest</artifactId>
+				<version>${hamcrest.version}</version>
 				<scope>test</scope>
 			</dependency>
 		</dependencies>
@@ -73,6 +115,7 @@
 		<module>listy.base</module>
 		<module>listy.main</module>
 		<module>listy.ui</module>
+		<module>listy.config</module>
 	</modules>
 
 </project>

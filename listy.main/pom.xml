@@ -5,24 +5,30 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<artifactId>listy-main</artifactId>
-	<version>${revision}</version>
+	<version>0.0.1</version>
 
 	<parent>
 		<groupId>listy</groupId>
 		<artifactId>listy</artifactId>
-		<version>${revision}</version>
+		<version>0.0.1</version>
 	</parent>
 
 	<dependencies>
 		<dependency>
 			<groupId>listy</groupId>
 			<artifactId>listy-base</artifactId>
-			<version>${revision}</version>
+		</dependency>
+		<dependency>
+			<groupId>listy</groupId>
+			<artifactId>listy-config</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>listy</groupId>
 			<artifactId>listy-ui</artifactId>
-			<version>${revision}</version>
+		</dependency>
+		<dependency>
+			<groupId>io.projectreactor</groupId>
+			<artifactId>reactor-core</artifactId>
 		</dependency>
 
 		<dependency>
@@ -30,58 +36,22 @@
 			<artifactId>junit-jupiter-engine</artifactId>
 			<scope>test</scope>
 		</dependency>
+		<dependency>
+			<groupId>org.mockito</groupId>
+			<artifactId>mockito-core</artifactId>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.mockito</groupId>
+			<artifactId>mockito-junit-jupiter</artifactId>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.hamcrest</groupId>
+			<artifactId>hamcrest</artifactId>
+			<scope>test</scope>
+		</dependency>
 
 	</dependencies>
-
-	<profiles>
-		<profile>
-			<id>native</id>
-			<build>
-				<plugins>
-					<plugin>
-						<groupId>org.graalvm.buildtools</groupId>
-						<artifactId>native-maven-plugin</artifactId>
-						<version>${graalvm.native.maven.plugin.version}</version>
-						<extensions>true</extensions>
-						<executions>
-							<execution>
-								<id>build-native</id>
-								<goals>
-									<goal>compile-no-fork</goal>
-								</goals>
-								<phase>package</phase>
-							</execution>
-						</executions>
-						<configuration>
-							<imageName>listy</imageName>
-							<fallback>false</fallback>
-							<classpath>.</classpath>
-							<buildArgs>
-								<arg>--module-path</arg>
-								<arg>${settings.localRepository}/listy/listy-base/${revision}/listy-base-${revision}.jar:${settings.localRepository}/listy/listy-ui/${revision}/listy-ui-${revision}.jar:${settings.localRepository}/listy/listy-main/${revision}/listy-main-${revision}.jar:${settings.localRepository}/org/openjfx/javafx-base/20/javafx-base-20-linux.jar:${settings.localRepository}/org/openjfx/javafx-graphics/20/javafx-graphics-20-linux.jar:${settings.localRepository}/org/openjfx/javafx-controls/20/javafx-controls-20-linux.jar</arg>
-								<arg>-m</arg>
-								<arg>listy.main/listy.main.Main</arg>
-							</buildArgs>
-						</configuration>
-					</plugin>
-				</plugins>
-			</build>
-		</profile>
-	</profiles>
-
-	<pluginRepositories>
-		<pluginRepository>
-			<id>graalvm-native-build-tools-snapshots</id>
-			<name>GraalVM native-build-tools Snapshots</name>
-			<url>https://raw.githubusercontent.com/graalvm/native-build-tools/snapshots</url>
-			<releases>
-				<enabled>false</enabled>
-			</releases>
-			<snapshots>
-				<enabled>true</enabled>
-			</snapshots>
-		</pluginRepository>
-	</pluginRepositories>
-
 
 </project>
